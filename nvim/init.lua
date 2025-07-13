@@ -30,6 +30,12 @@ vim.o.relativenumber = true -- Set relative line numberse
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
 
+-- Set the god damn indentation style: 4 spaces, no tabs
+vim.opt.expandtab = true -- Use spaces instead of tabs
+vim.opt.shiftwidth = 4 -- Indent by 4 spaces
+vim.opt.tabstop = 4 -- 1 tab == 4 spaces
+vim.opt.softtabstop = 4 -- Editing feels like tabs are 4 spaces
+
 vim.o.showmode = false -- Don't show the mode, since it's already in the status line
 
 -- Sync clipboard between OS and Neovim.
@@ -98,19 +104,8 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
--- TIP: Disable arrow keys in normal mode
--- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
--- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
--- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
--- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
-
--- TODO: Make this happen
--- Set CTRL+</> to comment current line
--- vim.keymap.set('n', '<C-_>', Comment.api)
-
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
---
 --  See `:help wincmd` for a list of all window commands
 vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
@@ -134,6 +129,18 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
     vim.hl.on_yank()
+  end,
+})
+
+-- Update indentation style after formatting the buffer
+vim.api.nvim_create_autocmd('BufWritePost', {
+  desc = 'Highlight when yanking (copying) text',
+  pattern = '*',
+  group = vim.api.nvim_create_augroup('auto-guess-indent', { clear = true }),
+  callback = function()
+    if vim.bo.modifiable and not vim.bo.readonly then
+      require('guess-indent').guess_from_buffer()
+    end
   end,
 })
 
@@ -164,91 +171,19 @@ rtp:prepend(lazypath)
 --
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
-  { -- NOTE: Added by ME, for toggling line comments
-    'numToStr/Comment.nvim',
-    opts = {},
-    config = function()
-      require('Comment').setup()
-    end,
-  },
-  { -- NOTE: Added by ME, for multicursor in neovim
-    'jake-stewart/multicursor.nvim',
-    config = function()
-      local mc = require 'multicursor-nvim'
-      mc.setup()
-
-      local set = vim.keymap.set
-
-      -- Add or skip cursor above/below the main cursor.
-      set({ 'n', 'x' }, '<up>', function()
-        mc.lineAddCursor(-1)
-      end)
-      set({ 'n', 'x' }, '<down>', function()
-        mc.lineAddCursor(1)
-      end)
-      set({ 'n', 'x' }, '<leader><up>', function()
-        mc.lineSkipCursor(-1)
-      end)
-      set({ 'n', 'x' }, '<leader><down>', function()
-        mc.lineSkipCursor(1)
-      end)
-
-      -- Add or skip adding a new cursor by matching word/selection
-      set({ 'n', 'x' }, '<leader>n', function()
-        mc.matchAddCursor(1)
-      end)
-      set({ 'n', 'x' }, '<leader>s', function()
-        mc.matchSkipCursor(1)
-      end)
-      set({ 'n', 'x' }, '<leader>N', function()
-        mc.matchAddCursor(-1)
-      end)
-      set({ 'n', 'x' }, '<leader>S', function()
-        mc.matchSkipCursor(-1)
-      end)
-
-      -- Add and remove cursors with control + left click.
-      set('n', '<c-leftmouse>', mc.handleMouse)
-      set('n', '<c-leftdrag>', mc.handleMouseDrag)
-      set('n', '<c-leftrelease>', mc.handleMouseRelease)
-
-      -- Disable and enable cursors.
-      set({ 'n', 'x' }, '<c-q>', mc.toggleCursor)
-
-      -- Mappings defined in a keymap layer only apply when there are
-      -- multiple cursors. This lets you have overlapping mappings.
-      mc.addKeymapLayer(function(layerSet)
-        -- Select a different cursor as the main one.
-        layerSet({ 'n', 'x' }, '<left>', mc.prevCursor)
-        layerSet({ 'n', 'x' }, '<right>', mc.nextCursor)
-
-        -- Delete the main cursor.
-        layerSet({ 'n', 'x' }, '<leader>x', mc.deleteCursor)
-
-        -- Enable and clear cursors using escape.
-        layerSet('n', '<esc>', function()
-          if not mc.cursorsEnabled() then
-            mc.enableCursors()
-          else
-            mc.clearCursors()
-          end
-        end)
-      end)
-
-      -- Customize how cursors look.
-      local hl = vim.api.nvim_set_hl
-      hl(0, 'MultiCursorCursor', { reverse = true })
-      hl(0, 'MultiCursorVisual', { link = 'Visual' })
-      hl(0, 'MultiCursorSign', { link = 'SignColumn' })
-      hl(0, 'MultiCursorMatchPreview', { link = 'Search' })
-      hl(0, 'MultiCursorDisabledCursor', { reverse = true })
-      hl(0, 'MultiCursorDisabledVisual', { link = 'Visual' })
-      hl(0, 'MultiCursorDisabledSign', { link = 'SignColumn' })
-    end,
-  },
+  { import = 'custom.plugins.comment' }, -- Create motions for managing comments
+  { import = 'custom.plugins.multi-cursor' }, -- Multicursor support for neovim
 
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
+  { -- Detect tabstop and shiftwidth automatically
+    'NMAC427/guess-indent.nvim',
+    config = function()
+      require('guess-indent').setup {
+        auto_cmd = true, -- detect on buffer read or new file
+        override_editorconfig = false, -- leave existing editorconfig undisturbed
+      }
+    end,
+  },
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -734,6 +669,29 @@ require('lazy').setup({
           end,
         },
       }
+      require('lspconfig').nixd.setup {
+        cmd = { 'nixd' }, -- Make sure this resolves to the full path of nixd if necessary
+        filetypes = { 'nix' },
+        settings = {
+          nixd = {
+            nixpkgs = {
+              expr = 'import <nixpkgs> {}',
+            },
+            formatting = {
+              command = { 'alejandra' }, -- or 'nixpkgs-fmt', etc.
+            },
+            -- Uncomment below and customize if you're using flakes
+            -- options = {
+            --   nixos = {
+            --     expr = '(builtins.getFlake "/path/to/flake").nixosConfigurations.myconfig.options',
+            --   },
+            --   home_manager = {
+            --     expr = '(builtins.getFlake "/path/to/flake").homeConfigurations.myhome.options',
+            --   },
+            -- },
+          },
+        },
+      }
     end,
   },
 
@@ -953,9 +911,9 @@ require('lazy').setup({
         -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
         --  If you are experiencing weird indenting issues, add the language to
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
+        additional_vim_regex_highlighting = { 'ruby', 'nix' },
       },
-      indent = { enable = true, disable = { 'ruby' } },
+      indent = { enable = true, disable = { 'ruby', 'nix' } },
     },
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
@@ -975,10 +933,9 @@ require('lazy').setup({
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
   -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
+  -- require 'kickstart.plugins.autopairs', -- Automatically inserts () when pressing just (, and so on.
+  -- require 'kickstart.plugins.neo-tree', -- Adds a file tree to neovim
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`

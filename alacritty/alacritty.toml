@@ -5,6 +5,7 @@ import = [
 
 [window]
 dimensions = { columns = 140, lines = 40 }
+opacity = 0.9
 
 [font]
 size = 14.0
@@ -29,3 +30,6 @@ style = "Regular"
 bindings = [
    { key = "Return", mods = "Control|Shift", action = "SpawnNewInstance" },
 ]
+
+[selection]
+save_to_clipboard = true
