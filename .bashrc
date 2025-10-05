@@ -14,9 +14,6 @@ alias language='languagetool --http --config server.properties --port 8081 --pub
 alias prog='cd ~/Dropbox/Programming/'
 export EDITOR="nvim"
 
-
-xset r rate 200 30 # Set repeat rate of holding down keys. NOTE: Only works on X11.
-# setxkbmap -option caps:escape # Bind caps lock to escape (more useful)
 export EDITOR=nvim
 export host=192.168.50.135
 export PATH=$PATH:$HOME/bin

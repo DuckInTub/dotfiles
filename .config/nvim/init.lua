@@ -669,7 +669,7 @@ require('lazy').setup({
           end,
         },
       }
-      require('lspconfig').nixd.setup {
+      vim.lsp.config('nixd', {
         cmd = { 'nixd' }, -- Make sure this resolves to the full path of nixd if necessary
         filetypes = { 'nix' },
         settings = {
@@ -691,7 +691,7 @@ require('lazy').setup({
             -- },
           },
         },
-      }
+      })
     end,
   },
 
