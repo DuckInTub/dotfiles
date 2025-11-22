@@ -1,0 +1,1 @@
+../../../dotfiles/.config/nwg-panel/executors/arch_updates.py
