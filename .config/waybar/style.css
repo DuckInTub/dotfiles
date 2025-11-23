@@ -1,183 +1,272 @@
+/* =============================================================================
+ * THEME CONFIGURATION
+ * =========================================================================== */
 
-/*base background color*/
-@define-color bg_main rgba(25, 25, 25, 0.65);
-@define-color bg_main_tooltip rgba(0, 0, 0, 0.7);
+/* Backgrounds */
+@define-color bar-bg            #111111; /* The main bar background */
+@define-color module-bg         #2a2a2a; /* Standard module background */
+@define-color module-bg-hover   #444444; /* Module hover state */
+@define-color module-border     #3e3e3e; /* Thin border around modules */
+
+/* Text / Foreground */
+@define-color text-white        #ffffff;
+@define-color text-primary      #eeeeee;
+@define-color text-secondary    #dddddd;
+@define-color text-muted        #888888;
+@define-color text-dim          #808080;
+
+/* Workspaces */
+@define-color ws-hover          #333333;
+@define-color ws-active         #444444;
+@define-color ws-urgent         #666666;
+
+/* Battery States */
+@define-color bat-warning-bg    #555555;
+@define-color bat-critical-bg   #000000;
+@define-color bat-critical-fg   #ffffff;
+
+/* UI Elements (Tooltips, Sliders) */
+@define-color tooltip-bg        #1e1e1e;
+@define-color tooltip-border    #333333;
+@define-color slider-trough     #111111;
+@define-color slider-highlight  #ffffff;
 
 
-/*base background color of selections */
-@define-color bg_hover rgba(200, 200, 200, 0.3);
-/*base background color of active elements */
-@define-color bg_active rgba(100, 100, 100, 0.5);
-
-/*base border color*/
-@define-color border_main rgba(255, 255, 255, 0.2);
-
-/*text color for entries, views and content in general */
-@define-color content_main white;
-/*text color for entries that are unselected */
-@define-color content_inactive rgba(255, 255, 255, 0.25);
-
+/* =============================================================================
+ * GLOBAL RESET & FONTS
+ * =========================================================================== */
 * {
-	text-shadow: none;
-	box-shadow: none;
-  border: none;
-  border-radius: 0;
-	font-family: "Segoe UI", "Ubuntu";
-  font-weight: 600;
-  font-size: 12.7px;
-	
-	
+    border: none;
+    border-radius: 0;
+    /* Change font-family to your preferred font */
+    font-family: "JetBrainsMono Nerd Font", "Roboto", sans-serif;
+    font-size: 14px;
+    min-height: 0;
 }
 
+/* =============================================================================
+ * MAIN BAR CONTAINER
+ * =========================================================================== */
 window#waybar {
-  background:  @bg_main;
-  border-top: 1px solid @border_main;
-  color: @content_main;
+    background-color: @bar-bg;
+    color: @text-white;
+    transition-property: background-color;
+    transition-duration: .5s;
 }
 
-tooltip {
-  background: @bg_main_tooltip;
-  border-radius: 5px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: @border_main;
-}
-tooltip label{
-  color: @content_main;
+/* Hides the bar when hidden (standard waybar behavior) */
+window#waybar.hidden {
+    opacity: 0.2;
 }
 
+/* =============================================================================
+ * MODULE BUBBLES (Common Styling)
+ * =========================================================================== */
+#custom-os_button,
+#workspaces,
+#mpris,
+#tray,
+#network,
+#battery,
+#audio,
+#clock {
+    background-color: @module-bg;
+    color: @text-primary;
+    padding: 4px 12px;
+    border-radius: 10px;
+    border: 1px solid @module-border;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+/* Hover Effects */
+#custom-os_button:hover,
+#mpris:hover,
+#network:hover,
+#battery:hover,
+#audio:hover,
+#clock:hover {
+    background-color: @module-bg-hover;
+}
+
+/* =============================================================================
+ * LEFT MODULES
+ * =========================================================================== */
+
+/* OS Button (Launcher) */
 #custom-os_button {
-	font-family: "JetBrainsMono Nerd Font";
-  font-size: 24px;
-	padding-left: 12px;
-	padding-right: 20px;
-	transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-#custom-os_button:hover {
-  background:  @bg_hover;
-	color: @content_main;
+    font-size: 18px;
+    padding-right: 16px;
+    color: @text-white;
 }
 
+/* Hyprland Workspaces */
 #workspaces {
-  color: transparent;
-	margin-right: 1.5px;
-	margin-left: 1.5px;
+    padding: 0px 4px;
 }
+
 #workspaces button {
-  padding: 3px;
-  color: @content_inactive;
-	transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+    padding: 0 5px;
+    background-color: transparent;
+    color: @text-dim;
+    box-shadow: none;
+    text-shadow: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
 }
-#workspaces button.active {
-	color: @content_main;
-	border-bottom: 3px solid white;
-}
-#workspaces button.focused {
-  color: @bg_active;
-}
-#workspaces button.urgent {
-	background:  rgba(255, 200, 0, 0.35);
-	border-bottom: 3px dashed @warning_color;
-	color: @warning_color;
-}
+
 #workspaces button:hover {
-  background: @bg_hover;
-	color: @content_main;
+    background-color: @ws-hover;
+    color: @text-white;
 }
 
-#taskbar {
+#workspaces button.active {
+    color: @text-white;
+    background-color: @ws-active;
+    min-width: 40px;
 }
 
-#taskbar button {
-	min-width: 130px;
-	border-bottom: 3px solid rgba(255, 255, 255, 0.3);
-	margin-left: 2px;
-	margin-right: 2px;
-  padding-left: 8px;
-  padding-right: 8px;
-  color: white;
-	transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+#workspaces button.urgent {
+    color: @text-white;
+    background-color: @ws-urgent;
 }
 
-#taskbar button.active {
-	border-bottom: 3px solid white;
-  background: @bg_active;
-}
-
-#taskbar button:hover {
-	border-bottom: 3px solid white;
-  background: @bg_hover;
-	color: @content_main;
-}
-
-#cpu, #disk, #memory {
-	padding:3px;
-}
-
-#temperature {
-	color: transparent;
-	font-size: 0px;
-	transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-#temperature.critical {
-	padding-right: 3px;
-	color: @warning_color;
-	font-size: initial;
-	border-bottom: 3px dashed @warning_color;
-	transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-
+/* Hyprland Window Title */
 #window {
-  border-radius: 10px;
-  margin-left: 20px;
-  margin-right: 20px;
+    background-color: transparent;
+    color: @text-secondary;
+    padding: 0 10px;
+    font-weight: bold;
 }
 
-#tray{
-  margin-left: 5px;
-  margin-right: 5px;
+/* =============================================================================
+ * CENTER MODULES
+ * =========================================================================== */
+
+#mpris {
+    color: @text-secondary;
+    min-width: 100px;
+}
+#mpris.paused {
+    color: @text-muted;
+    font-style: italic;
+}
+
+/* =============================================================================
+ * RIGHT MODULES
+ * =========================================================================== */
+
+/* Tray */
+#tray {
+    padding-right: 8px;
 }
 #tray > .passive {
-	border-bottom: none;
-}
-#tray > .active {
-	border-bottom: 3px solid white;
+    -gtk-icon-effect: dim;
 }
 #tray > .needs-attention {
-	border-bottom: 3px solid @warning_color;
+    -gtk-icon-effect: highlight;
 }
-#tray > widget {
-	transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+/* Network */
+#network {
+    padding-right: 14px;
 }
-#tray > widget:hover {
-	background: @bg_hover;
+#network.disconnected {
+    color: @text-muted;
+}
+
+/* Battery */
+#battery {
+    font-weight: bold;
+}
+
+#battery.charging, #battery.plugged {
+    color: @text-white;
+    background-color: @ws-hover; /* Re-using workspace hover gray */
+}
+
+#battery.warning {
+    color: @text-secondary;
+    background-color: @bat-warning-bg;
+}
+
+#battery.critical {
+    color: @bat-critical-fg;
+    background-color: @bat-critical-bg;
+    border-color: @text-white;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+/* Audio Group & Slider */
+#audio {
+    padding-right: 8px;
 }
 
 #pulseaudio {
-	font-family: "JetBrainsMono Nerd Font";
-	padding-left: 3px;
-  padding-right: 3px;
-	transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-#pulseaudio:hover {
- 	background: @bg_hover;
-}
-
-#network {
-	padding-left: 3px;
-  padding-right: 3px;
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+    border: none;
+    font-size: 16px;
+    color: @text-secondary;
 }
 
-#language {
-  padding-left: 5px;
-  padding-right: 5px;
+#pulseaudio.muted {
+    color: @text-dim;
 }
 
+/* Slider Styling */
+#pulseaudio-slider slider {
+    min-height: 0px;
+    min-width: 0px;
+    opacity: 0;
+    background-image: none;
+    border: none;
+    box-shadow: none;
+}
+
+#pulseaudio-slider trough {
+    min-height: 4px;
+    min-width: 60px;
+    border-radius: 5px;
+    background-color: @slider-trough;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#pulseaudio-slider highlight {
+    min-width: 5px;
+    border-radius: 5px;
+    background-color: @slider-highlight;
+}
+
+/* Clock */
 #clock {
-  padding-right: 5px;
-  padding-left: 5px;
-	transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+    font-weight: bold;
+    color: @text-white;
+    margin-right: 0;
 }
-#clock:hover {
-	background: @bg_hover;
+
+/* Tooltip Styling */
+tooltip {
+    background: @tooltip-bg;
+    border: 1px solid @tooltip-border;
+    border-radius: 8px;
+}
+tooltip label {
+    color: @text-white;
+}
+
+/* =============================================================================
+ * ANIMATIONS
+ * =========================================================================== */
+@keyframes blink {
+    to {
+        background-color: @bat-critical-fg;
+        color: @bat-critical-bg;
+    }
 }

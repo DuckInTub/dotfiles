@@ -6,45 +6,42 @@
         "hyprland/workspaces",
         "hyprland/window"
     ],
-    "modules-center": [mpris],
+    "modules-center": ["mpris"],
     "modules-right": [
         "tray",
         "network",
         "battery",
-        "pulseaudio",
+        "group/audio",
         "clock"
     ],
     "spacing": 10,
     "mode": "dock",
     "custom/os_button": {
         "format": "",
-        "on-click": "nwg-bar",
+        "on-click": "wlogout",
         "tooltip": false
     },
     "hyprland/workspaces": {
+        "format": "{icon}",
         "icon-size": 32,
         "spacing": 16,
+        "active-only": true,
         "format-icons": {
             "1": "",
             "2": "",
-            "3": "󱂵",
-            "4": "",
-            "5": ""
+            "3": "",
+            "4": "󱂵",
+            "5": "",
         }
     },
     "hyprland/window": {
-        "format": "{title}",
+        "format": "{initialTitle}",
         "max-length": 32,
-        "rewrite": {
-            ".* - (.*)": "$1"
-        }
-        "icon": true,
-        "icon-size": 28,
     },
     "mpris": {
-        "format": " {status_icon} {dynamic}",
+        "format": " {status_icon} {dynamic}",
         "interval": 3,
-        "dynamic-len": 40,
+        "dynamic-len": 200,
         "status-icons": {
             "playing": "▶",
             "paused": "⏸",
@@ -53,11 +50,11 @@
         "dynamic-order": ["title", "artist"],
     },
     "tray": {
-        "icon-size": 18,
+        "icon-size": 24,
         "spacing": 3
     },
     "clock": {
-        "format": "      {:%R\n %d.%m.%Y}",
+        "format": "        <big>{:%R\n %Y-%m-%d}</big>",
         "tooltip-format": "<tt><small>{calendar}</small></tt>",
         "calendar": {
             "mode": "year",
@@ -68,15 +65,13 @@
             "format": {
                 "months": "<span color='#ffead3'><b>{}</b></span>",
                 "days": "<span color='#ecc6d9'><b>{}</b></span>",
-                "weeks": "<span color='#99ffdd'><b>W{}</b></span>",
+                "weeks": "<span color='#99ffdd'><b>{}</b></span>",
                 "weekdays": "<span color='#ffcc66'><b>{}</b></span>",
                 "today": "<span color='#ff6699'><b><u>{}</u></b></span>"
             }
         },
         "actions": {
             "on-click-right": "mode",
-            "on-click-forward": "tz_up",
-            "on-click-backward": "tz_down",
             "on-scroll-up": "shift_up",
             "on-scroll-down": "shift_down"
         }
@@ -91,7 +86,14 @@
             "󰤢 ",
             "󰤢 ",
             "󰤨 "
-        ]
+        ],
+        "tooltip": true,
+        "tooltip-format": "
+            {ifname}\n
+            Up: {bandwidthUpBytes}\n
+            Down: {bandwidthDownBytes}
+        ",
+        "on-click": "hyprctl dispatch exec \"[workspace special; float; size 1280 720] nm-connection-editor\""
     },
     "battery": {
         "states": {
@@ -117,19 +119,40 @@
             "󰁹"
         ]
     },
-    "pulseaudio": {
-        "max-volume": 100,
-        "scroll-step": 5,
-        "format": "{icon}",
-        "tooltip-format": "{volume}%",
-        "format-muted": " ",
-        "format-icons": {
-            "default": [
-                " ",
-                " ",
-                " "
-            ]
+    "group/audio": {
+        "orientation": "inherit",
+        "drawer": {
+            "transition-duration": 400,
+            "children-class": "audio",
+            "transition-left-to-right": false
         },
-        "on-click": "pavucontrol"
-    }
+        "modules": [
+            "pulseaudio",
+            "pulseaudio/slider"
+        ]
+    },
+    "pulseaudio/slider": {
+        "min": 0,
+        "max": 100,
+        "orientation": "horizontal"
+    },
+    "pulseaudio": {
+        "interval": 3,
+        "format": "{icon}",
+        "format-icons": [
+            "<span size='14pt'>󰕿</span>",
+            "<span size='14pt'>󰖀</span>",
+            "<span size='14pt'>󰕾</span>"
+        ],
+        "format-muted": "<span size='14pt'>󰝟</span>",
+        "on-click-right": "pavucontrol -t 3",
+        "on-click": "hyprctl dispatch exec \"[workspace special; float; size 1280 720] pavucontrol\"",
+        "reverse-scrolling": true,
+        "tooltip": true,
+        "tooltip-format": "Volume: {volume}%\n{desc}",
+    },
+    "custom/brightness": {
+        "exec": "",
+        "interval": 5,
+    },
 }
