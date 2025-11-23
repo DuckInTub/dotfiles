@@ -1,82 +1,56 @@
 {
-    "layer": "bottom",
+    "layer": "top",
     "position": "bottom",
-    "mod": "dock",
-    "exclusive": true,
-    "gtk-layer-shell": true,
-    "margin-bottom": -1,
-    "passthrough": false,
-    "height": 41,
     "modules-left": [
         "custom/os_button",
         "hyprland/workspaces",
-        "wlr/taskbar"
+        "hyprland/window"
     ],
-    "modules-center": [],
+    "modules-center": [mpris],
     "modules-right": [
-        "cpu",
-        "temperature",
-        "memory",
-        "disk",
         "tray",
-        "pulseaudio",
         "network",
         "battery",
-        "hyprland/language",
+        "pulseaudio",
         "clock"
     ],
-    "hyprland/language": {
-        "format": "{}",
-        "format-en": "ENG",
-        "format-ru": "РУС"
+    "spacing": 10,
+    "mode": "dock",
+    "custom/os_button": {
+        "format": "",
+        "on-click": "nwg-bar",
+        "tooltip": false
     },
     "hyprland/workspaces": {
         "icon-size": 32,
         "spacing": 16,
-        "on-scroll-up": "hyprctl dispatch workspace r+1",
-        "on-scroll-down": "hyprctl dispatch workspace r-1"
+        "format-icons": {
+            "1": "",
+            "2": "",
+            "3": "󱂵",
+            "4": "",
+            "5": ""
+        }
     },
-    "custom/os_button": {
-        "format": "",
-        "on-click": "wofi --show drun",
-        "tooltip": false
-    },
-    "cpu": {
-        "interval": 5,
-        "format": "  {usage}%",
-        "max-length": 10
-    },
-    "temperature": {
-        "hwmon-path-abs": "/sys/devices/platform/coretemp.0/hwmon",
-        "input-filename": "temp2_input",
-        "critical-threshold": 75,
-        "tooltip": false,
-        "format-critical": "({temperatureC}°C)",
-        "format": "({temperatureC}°C)"
-    },
-    "disk": {
-        "interval": 30,
-        "format": "󰋊 {percentage_used}%",
-        "path": "/",
-        "tooltip": true,
-        "unit": "GB",
-        "tooltip-format":  "Available {free} of {total}"
-    },
-    "memory": {
-        "interval": 10,
-        "format": "  {percentage}%",
-        "max-length": 10,
-        "tooltip": true,
-        "tooltip-format": "RAM - {used:0.1f}GiB used"
-    },
-    "wlr/taskbar": {
-        "format": "{icon} {title:.17}",
+    "hyprland/window": {
+        "format": "{title}",
+        "max-length": 32,
+        "rewrite": {
+            ".* - (.*)": "$1"
+        }
+        "icon": true,
         "icon-size": 28,
-        "spacing": 3,
-        "on-click-middle": "close",
-        "tooltip-format": "{title}",
-        "ignore-list": [],
-        "on-click": "activate"
+    },
+    "mpris": {
+        "format": " {status_icon} {dynamic}",
+        "interval": 3,
+        "dynamic-len": 40,
+        "status-icons": {
+            "playing": "▶",
+            "paused": "⏸",
+            "stopped": ""
+        },
+        "dynamic-order": ["title", "artist"],
     },
     "tray": {
         "icon-size": 18,
@@ -108,9 +82,9 @@
         }
     },
     "network": {
-        "format-wifi": " {icon}",
-        "format-ethernet": "  ",
-        "format-disconnected": "󰌙",
+        "format-wifi": "{icon}",
+        "format-ethernet": "󰈀",
+        "format-disconnected": "󰤮",
         "format-icons": [
             "󰤯 ",
             "󰤟 ",
@@ -144,8 +118,8 @@
         ]
     },
     "pulseaudio": {
-        "max-volume": 150,
-        "scroll-step": 10,
+        "max-volume": 100,
+        "scroll-step": 5,
         "format": "{icon}",
         "tooltip-format": "{volume}%",
         "format-muted": " ",
@@ -156,6 +130,6 @@
                 " "
             ]
         },
-        "on-click": "pwvucontrol"
+        "on-click": "pavucontrol"
     }
 }
