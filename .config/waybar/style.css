@@ -3,10 +3,10 @@
  * =========================================================================== */
 
 /* Backgrounds */
-@define-color bar-bg            #111111; /* The main bar background */
-@define-color module-bg         #2a2a2a; /* Standard module background */
-@define-color module-bg-hover   #444444; /* Module hover state */
-@define-color module-border     #3e3e3e; /* Thin border around modules */
+@define-color bar-bg            #111111;
+@define-color module-bg         #2a2a2a;
+@define-color module-bg-hover   #444444;
+@define-color module-border     #3e3e3e;
 
 /* Text / Foreground */
 @define-color text-white        #ffffff;
@@ -25,7 +25,7 @@
 @define-color bat-critical-bg   #000000;
 @define-color bat-critical-fg   #ffffff;
 
-/* UI Elements (Tooltips, Sliders) */
+/* UI Elements */
 @define-color tooltip-bg        #1e1e1e;
 @define-color tooltip-border    #333333;
 @define-color slider-trough     #111111;
@@ -38,7 +38,6 @@
 * {
     border: none;
     border-radius: 0;
-    /* Change font-family to your preferred font */
     font-family: "JetBrainsMono Nerd Font", "Roboto", sans-serif;
     font-size: 14px;
     min-height: 0;
@@ -54,7 +53,6 @@ window#waybar {
     transition-duration: .5s;
 }
 
-/* Hides the bar when hidden (standard waybar behavior) */
 window#waybar.hidden {
     opacity: 0.2;
 }
@@ -79,7 +77,7 @@ window#waybar.hidden {
     margin-bottom: 4px;
 }
 
-/* Hover Effects */
+/* Hover effects */
 #custom-os_button:hover,
 #mpris:hover,
 #network:hover,
@@ -93,26 +91,32 @@ window#waybar.hidden {
  * LEFT MODULES
  * =========================================================================== */
 
-/* OS Button (Launcher) */
 #custom-os_button {
-    font-size: 18px;
+    font-size: 24px; /* Increased size */
     padding-right: 16px;
     color: @text-white;
 }
 
-/* Hyprland Workspaces */
+/* WORKSPACES */
 #workspaces {
     padding: 0px 4px;
 }
 
 #workspaces button {
-    padding: 0 5px;
+    padding: 0 10px;
     background-color: transparent;
     color: @text-dim;
-    box-shadow: none;
-    text-shadow: none;
     border-radius: 8px;
     transition: all 0.3s ease;
+}
+
+/* 
+ * TARGETING LABEL DIRECTLY 
+ * This ensures the font-size applies even if the button container resists it.
+ */
+#workspaces button label {
+    font-size: 22px; 
+    font-weight: bold;
 }
 
 #workspaces button:hover {
@@ -123,7 +127,7 @@ window#waybar.hidden {
 #workspaces button.active {
     color: @text-white;
     background-color: @ws-active;
-    min-width: 40px;
+    min-width: 30px;
 }
 
 #workspaces button.urgent {
@@ -131,7 +135,6 @@ window#waybar.hidden {
     background-color: @ws-urgent;
 }
 
-/* Hyprland Window Title */
 #window {
     background-color: transparent;
     color: @text-secondary;
@@ -156,7 +159,6 @@ window#waybar.hidden {
  * RIGHT MODULES
  * =========================================================================== */
 
-/* Tray */
 #tray {
     padding-right: 8px;
 }
@@ -167,22 +169,23 @@ window#waybar.hidden {
     -gtk-icon-effect: highlight;
 }
 
-/* Network */
+/* NETWORK */
 #network {
-    padding-right: 14px;
+    padding-right: 16px;
+    font-size: 22px; /* Increased Size */
 }
 #network.disconnected {
     color: @text-muted;
 }
 
-/* Battery */
+/* BATTERY */
 #battery {
     font-weight: bold;
 }
 
 #battery.charging, #battery.plugged {
     color: @text-white;
-    background-color: @ws-hover; /* Re-using workspace hover gray */
+    background-color: @ws-hover;
 }
 
 #battery.warning {
@@ -201,7 +204,7 @@ window#waybar.hidden {
     animation-direction: alternate;
 }
 
-/* Audio Group & Slider */
+/* AUDIO */
 #audio {
     padding-right: 8px;
 }
@@ -211,8 +214,8 @@ window#waybar.hidden {
     padding: 0;
     margin: 0;
     border: none;
-    font-size: 16px;
     color: @text-secondary;
+    font-size: 28px;
 }
 
 #pulseaudio.muted {
@@ -230,12 +233,13 @@ window#waybar.hidden {
 }
 
 #pulseaudio-slider trough {
-    min-height: 4px;
+    min-height: 6px;
     min-width: 60px;
     border-radius: 5px;
     background-color: @slider-trough;
     margin-left: 10px;
     margin-right: 10px;
+    margin-top: 2px;
 }
 
 #pulseaudio-slider highlight {
@@ -244,26 +248,31 @@ window#waybar.hidden {
     background-color: @slider-highlight;
 }
 
-/* Clock */
+/* CLOCK */
 #clock {
     font-weight: bold;
     color: @text-white;
     margin-right: 0;
 }
 
-/* Tooltip Styling */
+/* =============================================================================
+ * TOOLTIPS
+ * =========================================================================== */
 tooltip {
     background: @tooltip-bg;
-    border: 1px solid @tooltip-border;
+    border: 4px solid @tooltip-border;
     border-radius: 8px;
-}
-tooltip label {
-    color: @text-white;
+    font-family: "Noto Sans", sans-serif; /* Changed font */
+    font-size: 18px; /* Increased size */
 }
 
-/* =============================================================================
- * ANIMATIONS
- * =========================================================================== */
+tooltip label {
+    color: @text-white;
+    font-family: "Noto Sans", sans-serif; /* Ensure label inherits correctly */
+    font-size: 18px;
+    padding: 32px;
+}
+
 @keyframes blink {
     to {
         background-color: @bat-critical-fg;

@@ -23,7 +23,6 @@
     },
     "hyprland/workspaces": {
         "format": "{icon}",
-        "icon-size": 32,
         "spacing": 16,
         "active-only": true,
         "format-icons": {
@@ -39,9 +38,9 @@
         "max-length": 32,
     },
     "mpris": {
-        "format": " {status_icon} {dynamic}",
-        "interval": 3,
-        "dynamic-len": 200,
+        "format": "{status_icon} {dynamic}",
+        "interval": 1,
+        "dynamic-len": 150,
         "status-icons": {
             "playing": "▶",
             "paused": "⏸",
@@ -54,7 +53,7 @@
         "spacing": 3
     },
     "clock": {
-        "format": "        <big>{:%R\n %Y-%m-%d}</big>",
+        "format": "    <big>{:%R\n %Y-%m-%d}</big>",
         "tooltip-format": "<tt><small>{calendar}</small></tt>",
         "calendar": {
             "mode": "year",
@@ -88,11 +87,7 @@
             "󰤨 "
         ],
         "tooltip": true,
-        "tooltip-format": "
-            {ifname}\n
-            Up: {bandwidthUpBytes}\n
-            Down: {bandwidthDownBytes}
-        ",
+        "tooltip-format": "{ifname}\nUp: {bandwidthUpBytes}\nDown: {bandwidthDownBytes}",
         "on-click": "hyprctl dispatch exec \"[workspace special; float; size 1280 720] nm-connection-editor\""
     },
     "battery": {
@@ -140,9 +135,9 @@
         "interval": 3,
         "format": "{icon}",
         "format-icons": [
-            "<span size='14pt'>󰕿</span>",
-            "<span size='14pt'>󰖀</span>",
-            "<span size='14pt'>󰕾</span>"
+            "󰕿",
+            "󰖀",
+            "󰕾"
         ],
         "format-muted": "<span size='14pt'>󰝟</span>",
         "on-click-right": "pavucontrol -t 3",
