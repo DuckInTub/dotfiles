@@ -3,7 +3,7 @@
  * =========================================================================== */
 
 /* Backgrounds */
-@define-color bar-bg            #111111;
+@define-color bar-bg            rgba(0, 0, 0, 0);
 @define-color module-bg         #2a2a2a;
 @define-color module-bg-hover   #444444;
 @define-color module-border     #3e3e3e;
@@ -62,6 +62,7 @@ window#waybar.hidden {
  * =========================================================================== */
 #custom-os_button,
 #workspaces,
+#window,
 #mpris,
 #tray,
 #network,
@@ -80,6 +81,7 @@ window#waybar.hidden {
 /* Hover effects */
 #custom-os_button:hover,
 #mpris:hover,
+#window:hover,
 #network:hover,
 #battery:hover,
 #audio:hover,
@@ -93,7 +95,8 @@ window#waybar.hidden {
 
 #custom-os_button {
     font-size: 24px; /* Increased size */
-    padding-right: 16px;
+    padding-right: 22px;
+    margin-left: 4px;
     color: @text-white;
 }
 
@@ -135,11 +138,16 @@ window#waybar.hidden {
     background-color: @ws-urgent;
 }
 
+/* HYPRLAND WINDOW (Title) */
 #window {
-    background-color: transparent;
     color: @text-secondary;
-    padding: 0 10px;
     font-weight: bold;
+}
+
+/* Hide the module background if no window is active to avoid an empty box */
+window#waybar.empty #window {
+    background-color: transparent;
+    border: none;
 }
 
 /* =============================================================================
@@ -251,6 +259,7 @@ window#waybar.hidden {
 /* CLOCK */
 #clock {
     font-weight: bold;
+    font-size: 11px;
     color: @text-white;
     margin-right: 0;
 }
