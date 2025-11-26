@@ -9,6 +9,7 @@
     "modules-center": ["mpris"],
     "modules-right": [
         "tray",
+        "custom/notifications",
         "network",
         "battery",
         "group/audio",
@@ -51,6 +52,26 @@
     "tray": {
         "icon-size": 24,
         "spacing": 3
+    },
+    "custom/notifications": {
+        "tooltip": false,
+        "format": "{icon}",
+        "format-icons": {
+            "notification": "󱅫",
+            "none": "󰂚",
+            "dnd-notification": "󰂛",
+            "dnd-none": "󰂛",
+            "inhibited-notification": "󰂛",
+            "inhibited-none": "󰂛",
+            "dnd-inhibited-notification": "󰂛",
+            "dnd-inhibited-none": "󰂛"
+        },
+        "return-type": "json",
+        "exec-if": "which swaync-client",
+        "exec": "swaync-client -swb",
+        "on-click": "swaync-client -t -sw",
+        "on-click-right": "swaync-client -d -sw",
+        "escape": true
     },
     "clock": {
         "format": "    <big>{:%R\n %Y-%m-%d}</big>",
