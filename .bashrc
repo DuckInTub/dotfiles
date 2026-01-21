@@ -23,6 +23,8 @@ export XMODIFIERS=@im=fcitx
 export WINIT_UNIX_BACKEND=x11
 export PATH="$HOME/.nimble/bin:$PATH"
 
+xset r rate 250 25
+
 fuzzy-change-dir() {
 	local dir
 	dir="$(fd -t d . ~ | fzf)"
