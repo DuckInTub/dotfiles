@@ -5,9 +5,9 @@
 "Type q: to open a split buffer of your vim command history"
 "Hit <Enter> on a command to execute it"
 "You can also type a partial command and then use <Up>/<Down>"
+set nocompatible
 
 "Set relative number and number column"
-
 set number "nu"
 set relativenumber "rnu"
 set nuw=8
@@ -19,6 +19,7 @@ set si cin
 
 syntax on
 filetype indent plugin on
+set bg=dark
 colorscheme slate
 hi MatchParen None
 
